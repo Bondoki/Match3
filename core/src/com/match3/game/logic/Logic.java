@@ -31,7 +31,7 @@ public class Logic {
             for (int i = 0; i < reg.tiles.length; i++) {
                 for (int j = 0; j < reg.tiles.length; j++) {
 
-                    if ((mouse_position.x > reg.tiles[i][j].x) && (mouse_position.x < reg.tiles[i][j].x + 64) && (mouse_position.y > reg.tiles[i][j].y) && (mouse_position.y < reg.tiles[i][j].y + 64)) {
+                    if ((mouse_position.x > reg.tiles[i][j].x) && (mouse_position.x < reg.tiles[i][j].x + Registry.TILESIZE) && (mouse_position.y > reg.tiles[i][j].y) && (mouse_position.y < reg.tiles[i][j].y + Registry.TILESIZE)) {
 
                         if (reg.tiles[i][j].type != 100) {
 

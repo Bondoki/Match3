@@ -19,7 +19,7 @@ public class Registry {
 
     // Window Information
     public String windowName = "Match 3 Game";
-    public int windowWidth = 600;
+    public int windowWidth = 480;
     public int windowHeight = 800;
     public OrthographicCamera camera;
     //public StretchViewport viewport;
@@ -27,8 +27,8 @@ public class Registry {
 
     // Tiles
     public Tile[][] tiles;
-    public float tilesXOffset = 44;//250;
-    public float tilesYOffset = 44;//250;
+    public float tilesXOffset = 16;//(windowWidth-8*TILESIZE)/2// ;
+    public float tilesYOffset = 48;//250;
 
     // draw
     public Draw draw;
@@ -42,6 +42,10 @@ public class Registry {
     public boolean tileIsActive = false;
     public int activeX = 0;
     public int activeY = 0;
+
+    public static final int TILESIZE = 56; // 48, 56, 64, 256
+
+    public int gameState = 1;
 
     public Registry(){
 
@@ -64,10 +68,10 @@ public class Registry {
         img = new Texture("background.png");
 
         // Setup Tiles
-        tiles = new Tile[8][8];
+        tiles = new Tile[8][8]; // column row - 0 0 is upper left corner
         for (int i = 0; i < tiles.length; i++) {
             for (int j = 0; j < tiles.length; j++) {
-                Tile newTile = new Tile(MathUtils.random(0,5), (i * 64) + tilesXOffset, (j * 64) + tilesYOffset);
+                Tile newTile = new Tile(MathUtils.random(0,5), (i * TILESIZE) + tilesXOffset, (j * TILESIZE) + tilesYOffset, TILESIZE, TILESIZE);
                 tiles[i][j] = newTile;
                 System.out.println("Tiles: " + i + " " + j + " with type "+ tiles[i][j].type);
             }

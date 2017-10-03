@@ -19,16 +19,20 @@ public class Draw {
     public Draw() {
 
 
-        textureRegions = new TextureRegion[2000];
-        textureRegions[0] = new TextureRegion(new Texture("gem01_64x64.png"), 0, 0, 64, 64);
+        textureRegions = new TextureRegion[8];
+        textureRegions[0] = new TextureRegion(new Texture("gem01_48x48.png"), 0, 0, Registry.TILESIZE, Registry.TILESIZE);
+        textureRegions[1] = new TextureRegion(new Texture("gem02_48x48.png"), 0, 0, Registry.TILESIZE, Registry.TILESIZE);
+        textureRegions[2] = new TextureRegion(new Texture("gem03_48x48.png"), 0, 0, Registry.TILESIZE, Registry.TILESIZE);
+        textureRegions[3] = new TextureRegion(new Texture("gem04_48x48.png"), 0, 0, Registry.TILESIZE, Registry.TILESIZE);
+        textureRegions[4] = new TextureRegion(new Texture("gem05_48x48.png"), 0, 0, Registry.TILESIZE, Registry.TILESIZE);
+        textureRegions[5] = new TextureRegion(new Texture("gem06_48x48.png"), 0, 0, Registry.TILESIZE, Registry.TILESIZE);
+        /*textureRegions[0] = new TextureRegion(new Texture("gem01_64x64.png"), 0, 0, 64, 64);
         textureRegions[1] = new TextureRegion(new Texture("gem02_64x64.png"), 0, 0, 64, 64);
         textureRegions[2] = new TextureRegion(new Texture("gem03_64x64.png"), 0, 0, 64, 64);
         textureRegions[3] = new TextureRegion(new Texture("gem04_64x64.png"), 0, 0, 64, 64);
         textureRegions[4] = new TextureRegion(new Texture("gem05_64x64.png"), 0, 0, 64, 64);
         textureRegions[5] = new TextureRegion(new Texture("gem06_64x64.png"), 0, 0, 64, 64);
-        //for (int i = 0; i < 8; i++) {
-        //    textureRegions[i] = new TextureRegion(new Texture("puzzlequestsprites.png"), i * 64, 0, 64, 64);
-        //}
+        */
 
     }
 
