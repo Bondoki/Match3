@@ -33,6 +33,7 @@ public class Logic {
             // Check tile to left side
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
             if (reg.tileIsActive) {
+                // swap left
                 if (reg.activeCol - 1 >= 0) {
                     if ((reg.tiles[reg.activeRow][reg.activeCol].type != TileType.NONE) && (reg.tiles[reg.activeRow][reg.activeCol -1].type != TileType.NONE)) {
                         if ((mouse_position.x > reg.tiles[reg.activeRow][reg.activeCol -1].x) && (mouse_position.x < reg.tiles[reg.activeRow][reg.activeCol -1].x + Registry.TILESIZE) && (mouse_position.y > reg.tiles[reg.activeRow][reg.activeCol -1].y) && (mouse_position.y < reg.tiles[reg.activeRow][reg.activeCol-1].y + Registry.TILESIZE)) {
@@ -46,7 +47,66 @@ public class Logic {
                             reg.tiles[reg.activeRow][reg.activeCol].type = reg.tiles[reg.activeRow][reg.activeCol -1].type;
                             reg.tiles[reg.activeRow][reg.activeCol -1].type = swapTmpType;
 
-                            //clickDelayCounter = 0;
+
+
+                        }
+                    }
+                }
+                // swap right
+                if (reg.activeCol + 1 < reg.tiles.length) {
+                    if ((reg.tiles[reg.activeRow][reg.activeCol].type != TileType.NONE) && (reg.tiles[reg.activeRow][reg.activeCol +1].type != TileType.NONE)) {
+                        if ((mouse_position.x > reg.tiles[reg.activeRow][reg.activeCol +1].x) && (mouse_position.x < reg.tiles[reg.activeRow][reg.activeCol +1].x + Registry.TILESIZE) && (mouse_position.y > reg.tiles[reg.activeRow][reg.activeCol +1].y) && (mouse_position.y < reg.tiles[reg.activeRow][reg.activeCol+1].y + Registry.TILESIZE)) {
+
+                            // De-activate
+                            reg.tileIsActive = false;
+                            reg.tiles[reg.activeRow][reg.activeCol].isActivated = false;
+
+                            // Swap Types
+                            TileType swapTmpType = reg.tiles[reg.activeRow][reg.activeCol].type;
+                            reg.tiles[reg.activeRow][reg.activeCol].type = reg.tiles[reg.activeRow][reg.activeCol +1].type;
+                            reg.tiles[reg.activeRow][reg.activeCol +1].type = swapTmpType;
+
+
+
+                        }
+                    }
+                }
+
+                // swap up
+                if (reg.activeRow - 1 >= 0) {
+                    if ((reg.tiles[reg.activeRow][reg.activeCol].type != TileType.NONE) && (reg.tiles[reg.activeRow -1][reg.activeCol].type != TileType.NONE)) {
+                        if ((mouse_position.x > reg.tiles[reg.activeRow -1][reg.activeCol].x) && (mouse_position.x < reg.tiles[reg.activeRow -1][reg.activeCol].x + Registry.TILESIZE) && (mouse_position.y > reg.tiles[reg.activeRow -1][reg.activeCol].y) && (mouse_position.y < reg.tiles[reg.activeRow -1][reg.activeCol].y + Registry.TILESIZE)) {
+
+                            // De-activate
+                            reg.tileIsActive = false;
+                            reg.tiles[reg.activeRow][reg.activeCol].isActivated = false;
+
+                            // Swap Types
+                            TileType swapTmpType = reg.tiles[reg.activeRow][reg.activeCol].type;
+                            reg.tiles[reg.activeRow][reg.activeCol].type = reg.tiles[reg.activeRow -1][reg.activeCol].type;
+                            reg.tiles[reg.activeRow -1][reg.activeCol].type = swapTmpType;
+
+
+
+                        }
+                    }
+                }
+
+                // swap down
+                if (reg.activeRow + 1 < reg.tiles.length) {
+                    if ((reg.tiles[reg.activeRow][reg.activeCol].type != TileType.NONE) && (reg.tiles[reg.activeRow +1][reg.activeCol].type != TileType.NONE)) {
+                        if ((mouse_position.x > reg.tiles[reg.activeRow +1][reg.activeCol].x) && (mouse_position.x < reg.tiles[reg.activeRow +1][reg.activeCol].x + Registry.TILESIZE) && (mouse_position.y > reg.tiles[reg.activeRow +1][reg.activeCol].y) && (mouse_position.y < reg.tiles[reg.activeRow +1][reg.activeCol].y + Registry.TILESIZE)) {
+
+                            // De-activate
+                            reg.tileIsActive = false;
+                            reg.tiles[reg.activeRow][reg.activeCol].isActivated = false;
+
+                            // Swap Types
+                            TileType swapTmpType = reg.tiles[reg.activeRow][reg.activeCol].type;
+                            reg.tiles[reg.activeRow][reg.activeCol].type = reg.tiles[reg.activeRow +1][reg.activeCol].type;
+                            reg.tiles[reg.activeRow +1][reg.activeCol].type = swapTmpType;
+
+
 
                         }
                     }
