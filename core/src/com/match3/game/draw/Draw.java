@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.match3.game.registry.Registry;
+import com.match3.game.utility.TileType;
 
 /**
  * Created by bondoki on 27.08.17.
@@ -43,16 +44,37 @@ public class Draw {
         reg.batch.setProjectionMatrix(reg.camera.combined);
 
         Gdx.gl.glClearColor(0.2f, 0.2f, 0.6f, 1);
+        Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         reg.batch.begin();
         reg.batch.draw(reg.img, 0, 0);
 
 
-        for (int i = 0; i < reg.tiles.length; i++) {
-            for (int j = 0; j < reg.tiles.length; j++) {
-                reg.batch.draw(textureRegions[reg.tiles[i][j].type],reg.tiles[i][j].x,reg.tiles[i][j].y);
-            }
+        for (int row = 0; row < reg.tiles.length; row++) {
+            for (int col = 0; col < reg.tiles.length; col++) {
+
+                switch (reg.tiles[row][col].type)
+                     {
+                    case NONE:
+                                break;
+                    case ORANGE: reg.batch.draw(textureRegions[0],reg.tiles[row][col].x,reg.tiles[row][col].y);
+                                break;
+                    case BLUE:  reg.batch.draw(textureRegions[1],reg.tiles[row][col].x,reg.tiles[row][col].y);
+                                 break;
+                    case RED: reg.batch.draw(textureRegions[2],reg.tiles[row][col].x,reg.tiles[row][col].y);
+                                break;
+                    case GREEN: reg.batch.draw(textureRegions[3],reg.tiles[row][col].x,reg.tiles[row][col].y);
+                                 break;
+                    case PURPLE: reg.batch.draw(textureRegions[4],reg.tiles[row][col].x,reg.tiles[row][col].y);
+                                break;
+                    case YELLOW: reg.batch.draw(textureRegions[5],reg.tiles[row][col].x,reg.tiles[row][col].y);
+                                break;
+                    default:
+                        break;
+                    }
+                }
         }
+
 
         reg.batch.end();
     }

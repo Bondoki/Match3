@@ -3,7 +3,9 @@ package com.match3.game.logic;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector3;
+import com.match3.game.utility.GameState;
 import com.match3.game.registry.Registry;
+import com.match3.game.utility.TileType;
 
 /**
  * Created by bondoki on 27.08.17.
@@ -17,6 +19,7 @@ public class Logic {
 
     public void update() {
 
+        if(reg.gameState == GameState.USERS_TURN)
         if(Gdx.input.isTouched())
         {
             mouse_position.set(Gdx.input.getX(), Gdx.input.getY(), 0);
@@ -26,29 +29,53 @@ public class Logic {
             //mouse_position.y += reg.windowHeight / 2;
 
             System.out.println("Mouse Position: " + mouse_position.x + " " + mouse_position.y);
-            //if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
+
+            // Check tile to left side
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
+            if (reg.tileIsActive) {
+                if (reg.activeCol - 1 >= 0) {
+                    if ((reg.tiles[reg.activeRow][reg.activeCol].type != TileType.NONE) && (reg.tiles[reg.activeRow][reg.activeCol -1].type != TileType.NONE)) {
+                        if ((mouse_position.x > reg.tiles[reg.activeRow][reg.activeCol -1].x) && (mouse_position.x < reg.tiles[reg.activeRow][reg.activeCol -1].x + Registry.TILESIZE) && (mouse_position.y > reg.tiles[reg.activeRow][reg.activeCol -1].y) && (mouse_position.y < reg.tiles[reg.activeRow][reg.activeCol-1].y + Registry.TILESIZE)) {
+
+                            // De-activate
+                            reg.tileIsActive = false;
+                            reg.tiles[reg.activeRow][reg.activeCol].isActivated = false;
+
+                            // Swap Types
+                            TileType swapTmpType = reg.tiles[reg.activeRow][reg.activeCol].type;
+                            reg.tiles[reg.activeRow][reg.activeCol].type = reg.tiles[reg.activeRow][reg.activeCol -1].type;
+                            reg.tiles[reg.activeRow][reg.activeCol -1].type = swapTmpType;
+
+                            //clickDelayCounter = 0;
+
+                        }
+                    }
+                }
+            }
+
+            if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
             // process user input
-            for (int i = 0; i < reg.tiles.length; i++) {
-                for (int j = 0; j < reg.tiles.length; j++) {
+            for (int row = 0; row < reg.tiles.length; row++) {
+                for (int col = 0; col < reg.tiles.length; col++) {
 
-                    if ((mouse_position.x > reg.tiles[i][j].x) && (mouse_position.x < reg.tiles[i][j].x + Registry.TILESIZE) && (mouse_position.y > reg.tiles[i][j].y) && (mouse_position.y < reg.tiles[i][j].y + Registry.TILESIZE)) {
+                    if ((mouse_position.x > reg.tiles[row][col].x) && (mouse_position.x < reg.tiles[row][col].x + Registry.TILESIZE) && (mouse_position.y > reg.tiles[row][col].y) && (mouse_position.y < reg.tiles[row][col].y + Registry.TILESIZE)) {
 
-                        if (reg.tiles[i][j].type != 100) {
+                        if (reg.tiles[row][col].type != TileType.NONE) {
 
                             // De-activate previous tile
-                            reg.tiles[reg.activeX][reg.activeY].activated = false;
+                            reg.tiles[reg.activeRow][reg.activeCol].isActivated = false;
 
                             // Active new tile
-                            reg.tiles[i][j].activated = true;
+                            reg.tiles[row][col].isActivated = true;
                             reg.tileIsActive = true;
-                            reg.activeX = i;
-                            reg.activeY = j;
+                            reg.activeCol = col;
+                            reg.activeRow = row;
 
 
 
-                           // System.out.println("Activated: " + i + " " + j);
+                            System.out.println("Activated: Row" + row + " Col" + col);
 
-                            reg.tiles[i][j].type =  0;
+                           // reg.tiles[i][j].type =  0;
 
                         }
 

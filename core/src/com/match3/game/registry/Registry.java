@@ -6,10 +6,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.match3.game.utility.GameState;
 import com.match3.game.draw.Draw;
 import com.match3.game.entities.Tile;
 import com.match3.game.logic.Logic;
+import com.match3.game.utility.TileType;
 
 /**
  * Created by bondoki on 27.08.17.
@@ -40,12 +41,12 @@ public class Registry {
 
     // Active Tile
     public boolean tileIsActive = false;
-    public int activeX = 0;
-    public int activeY = 0;
+    public int activeCol = 0;
+    public int activeRow = 0;
 
     public static final int TILESIZE = 56; // 48, 56, 64, 256
 
-    public int gameState = 1;
+    public GameState gameState = GameState.USERS_TURN;
 
     public Registry(){
 
@@ -68,12 +69,14 @@ public class Registry {
         img = new Texture("background.png");
 
         // Setup Tiles
-        tiles = new Tile[8][8]; // column row - 0 0 is upper left corner
-        for (int i = 0; i < tiles.length; i++) {
-            for (int j = 0; j < tiles.length; j++) {
-                Tile newTile = new Tile(MathUtils.random(0,5), (i * TILESIZE) + tilesXOffset, (j * TILESIZE) + tilesYOffset, TILESIZE, TILESIZE);
-                tiles[i][j] = newTile;
-                System.out.println("Tiles: " + i + " " + j + " with type "+ tiles[i][j].type);
+        tiles = new Tile[8][8]; // [row] [column]  - 0 0 is upper left corner
+        for (int row = 0; row < tiles.length; row++) {
+            for (int col = 0; col < tiles.length; col++) {
+                //Tile newTile = new Tile(MathUtils.random(0,5), (col * TILESIZE) + tilesXOffset, ((tiles.length -1 -row) * TILESIZE) + tilesYOffset, TILESIZE, TILESIZE);
+                Tile newTile = new Tile(TileType.getRandom(), (col * TILESIZE) + tilesXOffset, ((tiles.length -1 -row) * TILESIZE) + tilesYOffset, TILESIZE, TILESIZE);
+
+                tiles[row][col] = newTile;
+                System.out.println("Tiles: " + row + " " + col + " with type "+ tiles[row][col].type);
             }
         }
     }
