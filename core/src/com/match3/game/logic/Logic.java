@@ -23,13 +23,11 @@ public class Logic {
         if(Gdx.input.isTouched())
         {
             mouse_position.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-             reg.camera.unproject(mouse_position, reg.viewport.getScreenX(), reg.viewport.getScreenY(), reg.viewport.getScreenWidth(), reg.viewport.getScreenHeight());
-           //reg.camera.unproject(mouse_position);
-            //mouse_position.x += reg.windowWidth / 2;
-            //mouse_position.y += reg.windowHeight / 2;
+            reg.camera.unproject(mouse_position, reg.viewport.getScreenX(), reg.viewport.getScreenY(), reg.viewport.getScreenWidth(), reg.viewport.getScreenHeight());
 
-            System.out.println("Mouse Position: " + mouse_position.x + " " + mouse_position.y);
+            //System.out.println("Mouse Position: " + mouse_position.x + " " + mouse_position.y);
 
+            // Check for SWAP
             // Check tile to left side
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
             if (reg.tileIsActive) {
@@ -111,6 +109,9 @@ public class Logic {
                         }
                     }
                 }
+
+                // check for match
+                reg.gameState = GameState.FIND_MATCH;
             }
 
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
@@ -144,5 +145,93 @@ public class Logic {
                 }
             }
         }
+
+        // check for matches
+        if (reg.gameState == GameState.FIND_MATCH) {
+            checkMatches();
+        }
+
+    }
+
+    public void checkMatches()
+    {
+        boolean foundMatch = false;
+
+        foundMatch = checkMatchInRow(5) || checkMatchInColumn(5) || checkMatchInRow(4) || checkMatchInColumn(4) || checkMatchInRow(3) || checkMatchInColumn(3);
+
+        if(foundMatch)
+        {
+           // reg.gameState = GameState.FALLING_TILES;
+        }
+        else
+        {
+            reg.gameState = GameState.USERS_TURN;
+        }
+    }
+
+    public boolean checkMatchInRow(int length) {
+
+        boolean foundMatchInRow = false;
+
+        for (int row = 0; row < reg.tiles.length; row++) {
+            for (int col = 0; col < reg.tiles.length; col++) {
+                if (reg.tiles[row][col].type != TileType.MATCH) {
+                    if ((row + (length-1)) < reg.tiles.length) {
+
+                        int count = 0;
+                        for(int idx = 1; idx < length; idx++)
+                        {
+                            if(reg.tiles[row][col].type == reg.tiles[row + idx][col].type)
+                                count++;
+                        }
+
+                        if(count == (length-1))
+                        {
+                            for (int k = 0; k < length; k++) {
+                                reg.tiles[row + k][col].type = TileType.MATCH;
+                            }
+                            System.out.println("Match" + length + " Row at " + row + " " + col);
+                            foundMatchInRow = true;
+                        }
+
+                    }
+                }
+            }
+        }
+
+        return foundMatchInRow;
+    }
+
+    public boolean checkMatchInColumn(int length) {
+
+        boolean foundMatchInCol = false;
+
+        for (int row = 0; row < reg.tiles.length; row++) {
+            for (int col = 0; col < reg.tiles.length; col++) {
+                if (reg.tiles[row][col].type != TileType.MATCH) {
+                    if ((col + (length-1)) < reg.tiles.length) {
+
+                        int count = 0;
+                        for(int idx = 1; idx < length; idx++)
+                        {
+                            if(reg.tiles[row][col].type == reg.tiles[row][col + idx].type)
+                                count++;
+                        }
+
+                        if(count == (length-1))
+                        {
+                            for (int k = 0; k < length; k++) {
+                                reg.tiles[row][col + k].type = TileType.MATCH;
+                            }
+                            System.out.println("Match" + length + " Col at " + row + " " + col);
+                            foundMatchInCol = true;
+                        }
+
+                    }
+                }
+            }
+        }
+
+        return foundMatchInCol;
     }
 }
