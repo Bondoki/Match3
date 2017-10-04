@@ -48,6 +48,8 @@ public class Registry {
 
     public GameState gameState = GameState.USERS_TURN;
 
+    public int score = 0;
+
     public Registry(){
 
         // Window Information

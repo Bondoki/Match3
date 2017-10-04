@@ -151,17 +151,31 @@ public class Logic {
             checkMatches();
         }
 
+        // scoring matches
+        if (reg.gameState == GameState.SCORING_MATCH) {
+            scoreMatches();
+            reg.gameState = GameState.FALLING_TILES;
+        }
+
+        // update the tiles
+        if (reg.gameState == GameState.FALLING_TILES) {
+            fallingTiles();
+            reg.gameState = GameState.FIND_MATCH;
+        }
+
     }
 
     public void checkMatches()
     {
         boolean foundMatch = false;
 
-        foundMatch = checkMatchInRow(5) || checkMatchInColumn(5) || checkMatchInRow(4) || checkMatchInColumn(4) || checkMatchInRow(3) || checkMatchInColumn(3);
+        //avoid short-circuit operators
+        foundMatch = checkMatchInRow(5) | checkMatchInColumn(5) | checkMatchInRow(4) | checkMatchInColumn(4) | checkMatchInRow(3) | checkMatchInColumn(3);
 
         if(foundMatch)
         {
-           // reg.gameState = GameState.FALLING_TILES;
+            reg.gameState = GameState.SCORING_MATCH;
+
         }
         else
         {
@@ -233,5 +247,36 @@ public class Logic {
         }
 
         return foundMatchInCol;
+    }
+
+    public void scoreMatches()
+    {
+        int count = 0;
+
+        for (int row = 0; row < reg.tiles.length; row++) {
+            for (int col = 0; col < reg.tiles.length; col++) {
+                if (reg.tiles[row][col].type == TileType.MATCH) {
+                    count++;
+                }
+            }
+        }
+
+        reg.score += count;
+
+        System.out.println("Count: " + count +"   ->  Score: "+reg.score);
+    }
+
+    public void fallingTiles()
+    {
+
+        for (int row = 0; row < reg.tiles.length; row++) {
+            for (int col = 0; col < reg.tiles.length; col++) {
+                if (reg.tiles[row][col].type == TileType.MATCH) {
+                    reg.tiles[row][col].type = TileType.getRandom();
+                }
+            }
+        }
+
+
     }
 }
