@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.match3.game.animation.Animation;
 import com.match3.game.animation.AnimationHandler;
 import com.match3.game.animation.AnimationSwap;
+import com.match3.game.input.Input;
 import com.match3.game.utility.GameState;
 import com.match3.game.draw.Draw;
 import com.match3.game.entities.Tile;
@@ -18,6 +19,8 @@ import com.match3.game.utility.TileType;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.badlogic.gdx.Gdx.input;
 
 /**
  * Created by bondoki on 27.08.17.
@@ -42,6 +45,9 @@ public class Registry extends ScreenAdapter implements AnimationHandler{
     public Draw draw;
     // logic
     public Logic logic;
+
+    // inputHandler
+    public Input input;
 
     public SpriteBatch batch;
     public Texture img;
@@ -77,6 +83,9 @@ public class Registry extends ScreenAdapter implements AnimationHandler{
         logic = new Logic();
         logic.reg = this;
 
+        input = new Input();
+        input.reg = this;
+
         batch = new SpriteBatch();
         img = new Texture("background.png");
 
@@ -106,12 +115,31 @@ public class Registry extends ScreenAdapter implements AnimationHandler{
 
     }
 
-    public void swapAnimation(int row1, int col1, int row2, int col2, boolean swapback)
+    public void trySwapTiles(int row1, int col1, int row2, int col2)
     {
-        this.animations.add(new AnimationSwap(tiles[row1][col1], tiles[row2][col2], swapback, this));
+        Tile A = tiles[row1][col1];
+        Tile B = tiles[row2][col2];
+        boolean success = logic.isSwapSuccessfulDryRun(row1, col1, row2, col2);
 
+        //this.animations.add(new AnimationSwap(A, B, !success, this));
 
+        if (success)
+        {
+            TileType swapTmpType = tiles[row1][col1].type;
+            tiles[row1][col1].type = tiles[row2][col2].type;
+            tiles[row2][col2].type = swapTmpType;
+            gameState=GameState.FIND_MATCH;
+            //        gameState = GameState.SCORING_MATCH;
+        }
+        else
+        {
+            gameState = GameState.USERS_TURN;
+            this.animations.add(new AnimationSwap(tiles[row1][col1], tiles[row2][col2], !success, this));
+
+        }
     }
+
+
 
     @Override
     public void onComplete(Animation animation)

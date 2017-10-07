@@ -26,6 +26,9 @@ public class Match3 extends Game { //ApplicationAdapter {
 	@Override
 	public void render () {
 
+		// Input
+		//reg.input.update();
+
 		// Logic
 		reg.logic.update();
 
@@ -35,6 +38,7 @@ public class Match3 extends Game { //ApplicationAdapter {
 		if (this.getScreen() != reg )
 		{
 			this.setScreen(reg);
+			Gdx.input.setInputProcessor(reg.input);
 		}
 		super.render();
 
