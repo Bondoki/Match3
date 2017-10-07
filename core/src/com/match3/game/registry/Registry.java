@@ -1,22 +1,29 @@
 package com.match3.game.registry;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.match3.game.animation.Animation;
+import com.match3.game.animation.AnimationHandler;
+import com.match3.game.animation.AnimationSwap;
 import com.match3.game.utility.GameState;
 import com.match3.game.draw.Draw;
 import com.match3.game.entities.Tile;
 import com.match3.game.logic.Logic;
 import com.match3.game.utility.TileType;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by bondoki on 27.08.17.
  */
 
-public class Registry {
+public class Registry extends ScreenAdapter implements AnimationHandler{
 
     // Window Information
     public String windowName = "Match 3 Game";
@@ -51,6 +58,8 @@ public class Registry {
 
     public int score = 0;
 
+    public List<Animation> animations = new ArrayList<Animation>();
+
     public Registry(){
 
         // Window Information
@@ -83,6 +92,39 @@ public class Registry {
             }
         }
     }
+
+    @Override
+    public void render(float delta)
+    {
+
+        //Play animations
+        for (int index = 0; index < this.animations.size(); ++index)
+        {
+            this.animations.get(index).update(delta);
+        }
+
+
+    }
+
+    public void swapAnimation(int row1, int col1, int row2, int col2, boolean swapback)
+    {
+        this.animations.add(new AnimationSwap(tiles[row1][col1], tiles[row2][col2], swapback, this));
+
+
+    }
+
+    @Override
+    public void onComplete(Animation animation)
+    {
+
+        if (animation.getClass() == AnimationSwap.class)
+        {
+            AnimationSwap swapAnimation = (AnimationSwap)animation;
+
+        }
+        this.animations.remove(animation);
+    }
+
 
     public void dispose() {
         batch.dispose();

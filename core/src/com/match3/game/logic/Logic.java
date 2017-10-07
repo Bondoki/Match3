@@ -104,7 +104,7 @@ public class Logic {
                             reg.tiles[reg.activeRow][reg.activeCol].type = reg.tiles[reg.activeRow +1][reg.activeCol].type;
                             reg.tiles[reg.activeRow +1][reg.activeCol].type = swapTmpType;
 
-
+                            //reg.swapAnimation(reg.activeRow, reg.activeCol, reg.activeRow +1,reg.activeCol, false);
 
                         }
                     }
@@ -112,6 +112,7 @@ public class Logic {
 
                 // check for match
                 reg.gameState = GameState.FIND_MATCH;
+
             }
 
             if (Gdx.input.isButtonPressed(Input.Buttons.LEFT))
@@ -148,7 +149,12 @@ public class Logic {
 
         // check for matches
         if (reg.gameState == GameState.FIND_MATCH) {
-            checkMatches();
+
+            if(checkMatches() == false)
+                reg.gameState = GameState.USERS_TURN;
+            else
+                reg.gameState = GameState.SCORING_MATCH;
+
         }
 
         // scoring matches
@@ -166,22 +172,15 @@ public class Logic {
 
     }
 
-    public void checkMatches()
+    public boolean checkMatches()
     {
         boolean foundMatch = false;
 
         //avoid short-circuit operators
         foundMatch = checkMatchInRow(5) | checkMatchInColumn(5) | checkMatchInRow(4) | checkMatchInColumn(4) | checkMatchInRow(3) | checkMatchInColumn(3);
 
-        if(foundMatch)
-        {
-            reg.gameState = GameState.SCORING_MATCH;
+        return foundMatch;
 
-        }
-        else
-        {
-            reg.gameState = GameState.USERS_TURN;
-        }
     }
 
     public boolean checkMatchInRow(int length) {
