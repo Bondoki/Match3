@@ -46,7 +46,8 @@ public class Registry {
 
     public static final int TILESIZE = 56; // 48, 56, 64, 256
 
-    public GameState gameState = GameState.USERS_TURN;
+    //! Initial state maybe causes already matches
+    public GameState gameState = GameState.FIND_MATCH;//GameState.USERS_TURN;
 
     public int score = 0;
 

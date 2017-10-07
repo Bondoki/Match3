@@ -154,6 +154,7 @@ public class Logic {
         // scoring matches
         if (reg.gameState == GameState.SCORING_MATCH) {
             scoreMatches();
+            deleteMatchTiles();
             reg.gameState = GameState.FALLING_TILES;
         }
 
@@ -189,7 +190,7 @@ public class Logic {
 
         for (int row = 0; row < reg.tiles.length; row++) {
             for (int col = 0; col < reg.tiles.length; col++) {
-                if (reg.tiles[row][col].type != TileType.MATCH) {
+                if ((reg.tiles[row][col].type != TileType.MATCH) && (reg.tiles[row][col].type != TileType.NONE) ) {
                     if ((row + (length-1)) < reg.tiles.length) {
 
                         int count = 0;
@@ -204,7 +205,7 @@ public class Logic {
                             for (int k = 0; k < length; k++) {
                                 reg.tiles[row + k][col].type = TileType.MATCH;
                             }
-                            System.out.println("Match" + length + " Row at " + row + " " + col);
+                            System.out.println("Match Row" + length + " at row " + row + " col " + col);
                             foundMatchInRow = true;
                         }
 
@@ -222,7 +223,7 @@ public class Logic {
 
         for (int row = 0; row < reg.tiles.length; row++) {
             for (int col = 0; col < reg.tiles.length; col++) {
-                if (reg.tiles[row][col].type != TileType.MATCH) {
+                if ((reg.tiles[row][col].type != TileType.MATCH) && (reg.tiles[row][col].type != TileType.NONE) ) {
                     if ((col + (length-1)) < reg.tiles.length) {
 
                         int count = 0;
@@ -237,7 +238,7 @@ public class Logic {
                             for (int k = 0; k < length; k++) {
                                 reg.tiles[row][col + k].type = TileType.MATCH;
                             }
-                            System.out.println("Match" + length + " Col at " + row + " " + col);
+                            System.out.println("Match Col" + length + " at row " + row + " col " + col);
                             foundMatchInCol = true;
                         }
 
@@ -266,15 +267,65 @@ public class Logic {
         System.out.println("Count: " + count +"   ->  Score: "+reg.score);
     }
 
-    public void fallingTiles()
+    public void deleteMatchTiles()
     {
 
         for (int row = 0; row < reg.tiles.length; row++) {
             for (int col = 0; col < reg.tiles.length; col++) {
                 if (reg.tiles[row][col].type == TileType.MATCH) {
+                    reg.tiles[row][col].type = TileType.NONE;
+                }
+            }
+        }
+    }
+
+    public void fallingTiles()
+    {
+        /*
+        random adding
+        for (int row = 0; row < reg.tiles.length; row++) {
+            for (int col = 0; col < reg.tiles.length; col++) {
+                if (reg.tiles[row][col].type == TileType.NONE) {
                     reg.tiles[row][col].type = TileType.getRandom();
                 }
             }
+        }
+        */
+
+        boolean repeatFalling = false;
+
+        // falling from top to bottom
+        for (int row = (reg.tiles.length-1); row >= 0; row--) {
+            for (int col = 0; col < reg.tiles.length; col++) {
+                if (reg.tiles[row][col].type == TileType.NONE) {
+                    if ((row - 1) >= 0) {
+                        //if (reg.tiles[row - 1][col].type == TileType.NONE)
+                        {
+
+                            // Swap Tiles
+                            reg.tiles[row][col].type = reg.tiles[row-1][col].type;
+                            reg.tiles[row-1][col].type = TileType.NONE;
+                            repeatFalling = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        // add new tile on top
+        for (int col = 0; col < reg.tiles.length; col++) {
+                if (reg.tiles[0][col].type == TileType.NONE) {
+
+                        reg.tiles[0][col].type = TileType.getRandom();
+                        System.out.println("Added a Tile in col " + col);
+
+                        repeatFalling = true;
+
+                }
+        }
+
+        if (repeatFalling) {
+            fallingTiles();
         }
 
 
