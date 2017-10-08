@@ -222,17 +222,31 @@ public class Input implements InputProcessor {
                 this.touchedAtY = (int) mouse_position.y;
 
                 // De-activate previous tile
-                reg.tiles[reg.activeRow][reg.activeCol].isActivated = false;
+                if (reg.tileIsActive)
+                    reg.tiles[reg.activeRow][reg.activeCol].isActivated = false;
 
                 // Active new tile
                 reg.tiles[rowIdx][colIdx].isActivated = true;
                 reg.tileIsActive = true;
                 reg.activeCol = colIdx;
                 reg.activeRow = rowIdx;
-                System.out.println("row " + rowIdx + " col " + colIdx + " in table " + isIdxInsideRowAndCol(rowIdx, colIdx) + " type: " +reg.tiles[rowIdx][colIdx].type);
+                System.out.println("row " + rowIdx + " col " + colIdx + " in table " + isIdxInsideRowAndCol(rowIdx, colIdx) + " type: " +reg.tiles[rowIdx][colIdx].type + "  x: "+reg.tiles[rowIdx][colIdx].x +" y: "+reg.tiles[rowIdx][colIdx].y );
 
                 return true;
             }
+        }
+        else
+        {
+            //outside of the table
+            // De-activate previous tile
+            if (reg.tileIsActive)
+                reg.tiles[reg.activeRow][reg.activeCol].isActivated = false;
+
+            // No new Active tile
+            reg.tileIsActive = false;
+            reg.activeCol = -1;
+            reg.activeRow = -1;
+
         }
 
         return false;
@@ -277,8 +291,8 @@ public class Input implements InputProcessor {
         mouse_position.set(screenX, screenY, 0);
         reg.camera.unproject(mouse_position, reg.viewport.getScreenX(), reg.viewport.getScreenY(), reg.viewport.getScreenWidth(), reg.viewport.getScreenHeight());
 
-
-        this.trySwap((int) mouse_position.x, (int) mouse_position.y, 0.25f * reg.TILESIZE);
+        if(reg.tileIsActive == true)
+         this.trySwap((int) mouse_position.x, (int) mouse_position.y, 0.25f * reg.TILESIZE);
 
         this.touchedAtX = -1;
         this.touchedAtY = -1;

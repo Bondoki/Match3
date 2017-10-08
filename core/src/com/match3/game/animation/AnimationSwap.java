@@ -2,6 +2,7 @@ package com.match3.game.animation;
 
 
 import com.match3.game.entities.Tile;
+import com.match3.game.utility.TileType;
 
 public class AnimationSwap implements Animation
 {
@@ -39,10 +40,17 @@ public class AnimationSwap implements Animation
 		this.gem2.x -= deltaX;
 		this.gem2.y -= deltaY;
 		this.currentDuration += delta;
+
+		System.out.println("Tile1 X"+gem1.x+" y"+gem1.y);
+		System.out.println("Tile2 X"+gem2.x+" y"+gem2.y);
+
 		if (this.currentDuration >= AnimationSwap.totalDuration)
 		{
 			if (this.swapBack)
 			{
+				System.out.println("Tile1 SwapReturn X"+gem1.x+" y"+gem1.y);
+				System.out.println("Tile2 SwapReturn X"+gem2.x+" y"+gem2.y);
+
 				this.swapBack = false;
 				this.currentDuration = 0;
 				this.distanceX = -this.distanceX;
@@ -51,6 +59,9 @@ public class AnimationSwap implements Animation
 			}
 			else
 			{
+				System.out.println("Tile1 END X"+gem1.x+" y"+gem1.y);
+				System.out.println("Tile2 END X"+gem2.x+" y"+gem2.y);
+
 
 				this.handler.onComplete(this);
 			}

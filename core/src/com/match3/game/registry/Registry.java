@@ -57,6 +57,9 @@ public class Registry extends ScreenAdapter implements AnimationHandler{
     public int activeCol = 0;
     public int activeRow = 0;
 
+    public int activeColToSwap = 0;
+    public int activeRowToSwap = 0;
+
     public static final int TILESIZE = 56; // 48, 56, 64, 256
 
     //! Initial state maybe causes already matches
@@ -65,6 +68,7 @@ public class Registry extends ScreenAdapter implements AnimationHandler{
     public int score = 0;
 
     public List<Animation> animations = new ArrayList<Animation>();
+    public boolean swapOccurred = false;
 
     public Registry(){
 
@@ -121,20 +125,30 @@ public class Registry extends ScreenAdapter implements AnimationHandler{
         Tile B = tiles[row2][col2];
         boolean success = logic.isSwapSuccessfulDryRun(row1, col1, row2, col2);
 
-        //this.animations.add(new AnimationSwap(A, B, !success, this));
+        this.animations.add(new AnimationSwap(A, B, !success, this));
+
+        activeCol = col1;
+        activeRow = row1;
+
+        activeColToSwap = col2;
+        activeRowToSwap = row2;
 
         if (success)
         {
+            swapOccurred = true;
+            System.out.println("Swapping with Match");
+            /*
             TileType swapTmpType = tiles[row1][col1].type;
             tiles[row1][col1].type = tiles[row2][col2].type;
             tiles[row2][col2].type = swapTmpType;
+            */
             gameState=GameState.FIND_MATCH;
             //        gameState = GameState.SCORING_MATCH;
         }
         else
         {
             gameState = GameState.USERS_TURN;
-            this.animations.add(new AnimationSwap(tiles[row1][col1], tiles[row2][col2], !success, this));
+           // this.animations.add(new AnimationSwap(tiles[row1][col1], tiles[row2][col2], !success, this));
 
         }
     }
@@ -148,6 +162,17 @@ public class Registry extends ScreenAdapter implements AnimationHandler{
         if (animation.getClass() == AnimationSwap.class)
         {
             AnimationSwap swapAnimation = (AnimationSwap)animation;
+            // at least a match with no back swapping
+            if (swapAnimation.swapBack==false)
+            {
+                //System.out.println("Animation Swap with Match completed.");
+                /*TileType swapTmpType = tiles[activeRow][activeCol].type;
+                tiles[activeRow][activeCol].type = tiles[activeRowToSwap][activeColToSwap].type;
+                tiles[activeRowToSwap][activeColToSwap].type = swapTmpType;
+                */
+            }
+
+            System.out.println("Animation Swap completed.");
 
         }
         this.animations.remove(animation);
