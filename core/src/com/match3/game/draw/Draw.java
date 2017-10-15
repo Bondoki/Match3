@@ -57,17 +57,17 @@ public class Draw {
                      {
                     case NONE:
                                 break;
-                    case ORANGE: reg.batch.draw(textureRegions[0],reg.tiles[row][col].x,reg.tiles[row][col].y);
+                    case ORANGE: reg.batch.draw(textureRegions[0],reg.tiles[row][col].x,reg.tiles[row][col].y, reg.tiles[row][col].sizeX, reg.tiles[row][col].sizeY);
                                 break;
-                    case BLUE:  reg.batch.draw(textureRegions[1],reg.tiles[row][col].x,reg.tiles[row][col].y);
+                    case BLUE:  reg.batch.draw(textureRegions[1],reg.tiles[row][col].x,reg.tiles[row][col].y, reg.tiles[row][col].sizeX, reg.tiles[row][col].sizeY);
                                  break;
-                    case RED: reg.batch.draw(textureRegions[2],reg.tiles[row][col].x,reg.tiles[row][col].y);
+                    case RED: reg.batch.draw(textureRegions[2],reg.tiles[row][col].x,reg.tiles[row][col].y, reg.tiles[row][col].sizeX, reg.tiles[row][col].sizeY);
                                 break;
-                    case GREEN: reg.batch.draw(textureRegions[3],reg.tiles[row][col].x,reg.tiles[row][col].y);
+                    case GREEN: reg.batch.draw(textureRegions[3],reg.tiles[row][col].x,reg.tiles[row][col].y, reg.tiles[row][col].sizeX, reg.tiles[row][col].sizeY);
                                  break;
-                    case PURPLE: reg.batch.draw(textureRegions[4],reg.tiles[row][col].x,reg.tiles[row][col].y);
+                    case PURPLE: reg.batch.draw(textureRegions[4],reg.tiles[row][col].x,reg.tiles[row][col].y, reg.tiles[row][col].sizeX, reg.tiles[row][col].sizeY);
                                 break;
-                    case YELLOW: reg.batch.draw(textureRegions[5],reg.tiles[row][col].x,reg.tiles[row][col].y);
+                    case YELLOW: reg.batch.draw(textureRegions[5],reg.tiles[row][col].x,reg.tiles[row][col].y, reg.tiles[row][col].sizeX, reg.tiles[row][col].sizeY);
                                 break;
                     default:
                         break;

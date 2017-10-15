@@ -7,6 +7,7 @@ package com.match3.game.utility;
 public enum GameState {
     USERS_TURN,
     FIND_MATCH,
+    MATCH_ANIMATION,
     SCORING_MATCH,
     FALLING_TILES;
 }

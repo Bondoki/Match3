@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.match3.game.animation.Animation;
+import com.match3.game.animation.AnimationDisappear;
 import com.match3.game.animation.AnimationHandler;
 import com.match3.game.animation.AnimationSwap;
 import com.match3.game.input.Input;
@@ -158,6 +159,13 @@ public class Registry extends ScreenAdapter implements AnimationHandler{
     @Override
     public void onComplete(Animation animation)
     {
+        if (animation.getClass() == AnimationDisappear.class)
+        {
+            AnimationDisappear disappearAnimation = (AnimationDisappear)animation;
+
+            gameState = GameState.SCORING_MATCH;
+
+        }
 
         if (animation.getClass() == AnimationSwap.class)
         {

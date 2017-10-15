@@ -3,10 +3,15 @@ package com.match3.game.logic;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector3;
+import com.match3.game.animation.AnimationDisappear;
 import com.match3.game.entities.Tile;
 import com.match3.game.utility.GameState;
 import com.match3.game.registry.Registry;
 import com.match3.game.utility.TileType;
+
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  * Created by bondoki on 27.08.17.
@@ -17,6 +22,8 @@ public class Logic {
     public Registry reg;
 
     public Vector3 mouse_position = new Vector3(0,0,0);
+
+    public Set<Tile> MatchedTiles = new HashSet<Tile>();
 
     public void update() {
 
@@ -49,15 +56,26 @@ public class Logic {
             if(checkMatches() == false)
                 reg.gameState = GameState.USERS_TURN;
             else
-                reg.gameState = GameState.SCORING_MATCH;
+                reg.gameState = GameState.MATCH_ANIMATION;
 
+            return;
+        }
+
+        if (reg.gameState == GameState.MATCH_ANIMATION)
+        {
+            animationTilesDisappear();
+
+            return;
         }
 
         // scoring matches
         if (reg.gameState == GameState.SCORING_MATCH) {
+            changeTypeToMatch();
             scoreMatches();
             deleteMatchTiles();
             reg.gameState = GameState.FALLING_TILES;
+
+            return;
         }
 
         // update the tiles
@@ -65,6 +83,8 @@ public class Logic {
             //fallingTiles();
             randomTiles();
             reg.gameState = GameState.FIND_MATCH;
+
+            return;
         }
 
     }
@@ -109,6 +129,9 @@ public class Logic {
         boolean foundMatch = false;
         System.out.println("check match");
 
+        //clear all matched tiles
+        MatchedTiles.clear();
+
         //avoid short-circuit operators
         foundMatch = checkMatchInRow(5) | checkMatchInColumn(5) | checkMatchInRow(4) | checkMatchInColumn(4) | checkMatchInRow(3) | checkMatchInColumn(3);
 
@@ -135,7 +158,10 @@ public class Logic {
                         if(count == (length-1))
                         {
                             for (int k = 0; k < length; k++) {
-                                reg.tiles[row + k][col].type = TileType.MATCH;
+                                //reg.tiles[row + k][col].type = TileType.MATCH;
+
+                                // add to Set
+                                MatchedTiles.add(reg.tiles[row + k][col]);
                             }
                             System.out.println("Match Row" + length + " at row " + row + " col " + col);
                             foundMatchInRow = true;
@@ -168,7 +194,10 @@ public class Logic {
                         if(count == (length-1))
                         {
                             for (int k = 0; k < length; k++) {
-                                reg.tiles[row][col + k].type = TileType.MATCH;
+                                //reg.tiles[row][col + k].type = TileType.MATCH;
+
+                                // add to Set
+                                MatchedTiles.add(reg.tiles[row][col + k]);
                             }
                             System.out.println("Match Col" + length + " at row " + row + " col " + col);
                             foundMatchInCol = true;
@@ -248,6 +277,16 @@ public class Logic {
         return foundMatchInCol;
     }
 
+    public void changeTypeToMatch()
+    {
+        for (Iterator<Tile> it = MatchedTiles.iterator(); it.hasNext(); )
+        {
+            Tile nextTile = it.next();
+            nextTile.type = TileType.MATCH;
+        }
+
+    }
+
     public void scoreMatches()
     {
         int count = 0;
@@ -265,6 +304,14 @@ public class Logic {
         System.out.println("Count: " + count +"   ->  Score: "+reg.score);
     }
 
+    public void animationTilesDisappear()
+    {
+        // disappear matching tile animation
+        if (MatchedTiles.size() > 0)
+        {
+            reg.animations.add(new AnimationDisappear(MatchedTiles, reg.TILESIZE, reg));
+        }
+    }
     public void deleteMatchTiles()
     {
 
@@ -275,6 +322,11 @@ public class Logic {
                 }
             }
         }
+
+        //remove matched gems
+        MatchedTiles.clear();
+
+
     }
 
     public void randomTiles()
@@ -285,6 +337,11 @@ public class Logic {
             for (int col = 0; col < reg.tiles.length; col++) {
                 if (reg.tiles[row][col].type == TileType.NONE) {
                     reg.tiles[row][col].type = TileType.getRandom();
+                    reg.tiles[row][col].sizeX = reg.TILESIZE;
+                    reg.tiles[row][col].sizeY = reg.TILESIZE;
+
+                    reg.tiles[row][col].x = (col * reg.TILESIZE) + reg.tilesXOffset;
+                    reg.tiles[row][col].y = ((reg.tiles.length -1 -row) * reg.TILESIZE) + reg.tilesYOffset;
                 }
             }
         }
