@@ -12,6 +12,8 @@ import com.match3.game.animation.AnimationDisappear;
 import com.match3.game.animation.AnimationFalling;
 import com.match3.game.animation.AnimationHandler;
 import com.match3.game.animation.AnimationSwap;
+import com.match3.game.gamestate.GState;
+import com.match3.game.gamestate.GStateFindMatch;
 import com.match3.game.input.Input;
 import com.match3.game.utility.GameState;
 import com.match3.game.draw.Draw;
@@ -28,7 +30,7 @@ import static com.badlogic.gdx.Gdx.input;
  * Created by bondoki on 27.08.17.
  */
 
-public class Registry extends ScreenAdapter implements AnimationHandler{
+public class Registry extends ScreenAdapter implements AnimationHandler {
 
     // Window Information
     public String windowName = "Match 3 Game";
@@ -65,7 +67,7 @@ public class Registry extends ScreenAdapter implements AnimationHandler{
     public static final int TILESIZE = 56; // 48, 56, 64, 256
 
     //! Initial state maybe causes already matches
-    public GameState gameState = GameState.FIND_MATCH;//GameState.USERS_TURN;
+    public GState gameState;// = GameState.FIND_MATCH;//GameState.USERS_TURN;
 
     public int score = 0;
 
@@ -106,6 +108,17 @@ public class Registry extends ScreenAdapter implements AnimationHandler{
                 System.out.println("Tiles: " + row + " " + col + " with type "+ tiles[row][col].type);
             }
         }
+
+
+    }
+
+    public void logic()
+    {
+        //Check if all animations are done before continuing the game
+        if (animations.size() > 0)
+            return;
+
+        gameState.doLogic();
     }
 
     @Override
@@ -144,12 +157,20 @@ public class Registry extends ScreenAdapter implements AnimationHandler{
             tiles[row1][col1].type = tiles[row2][col2].type;
             tiles[row2][col2].type = swapTmpType;
             */
-            gameState=GameState.FIND_MATCH;
+
+            Tile swapTmpTile = tiles[activeRow][activeCol];
+            tiles[activeRow][activeCol] = tiles[activeRowToSwap][activeColToSwap];
+            tiles[activeRowToSwap][activeColToSwap] = swapTmpTile;
+
+            swapOccurred = false;
+
+            changeGameState(new GStateFindMatch(this));//gameState=GameState.FIND_MATCH;
             //        gameState = GameState.SCORING_MATCH;
         }
         else
         {
-            gameState = GameState.USERS_TURN;
+            //changeGameState(new );
+            //gameState = GameState.USERS_TURN;
            // this.animations.add(new AnimationSwap(tiles[row1][col1], tiles[row2][col2], !success, this));
 
         }
@@ -164,7 +185,7 @@ public class Registry extends ScreenAdapter implements AnimationHandler{
         {
             AnimationDisappear disappearAnimation = (AnimationDisappear)animation;
 
-            gameState = GameState.SCORING_MATCH;
+           // gameState = GameState.SCORING_MATCH;
 
         }
 
@@ -172,7 +193,7 @@ public class Registry extends ScreenAdapter implements AnimationHandler{
         {
             AnimationFalling fallingAnimation = (AnimationFalling)animation;
 
-            gameState = GameState.FALLING_TILES;
+          //  gameState = GameState.FALLING_TILES;
 
         }
 
@@ -195,6 +216,19 @@ public class Registry extends ScreenAdapter implements AnimationHandler{
         this.animations.remove(animation);
     }
 
+
+
+
+    public void changeGameState(GState gstate)
+    {
+        this.gameState = gstate;
+    }
+
+    public GState getGameState() {
+
+        return gameState;
+
+    }
 
     public void dispose() {
         batch.dispose();

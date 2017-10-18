@@ -25,6 +25,7 @@ public class AnimationDisappear implements Animation
 
         this.gemSize = gemSize;
         this.currentDuration = 0;
+        System.out.println("AnimationDisappear");
     }
 
     @Override

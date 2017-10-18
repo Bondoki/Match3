@@ -8,6 +8,7 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.match3.game.gamestate.GStateFindMatch;
 import com.match3.game.registry.Registry;
 
 public class Match3 extends Game { //ApplicationAdapter {
@@ -18,6 +19,7 @@ public class Match3 extends Game { //ApplicationAdapter {
 	public void create () {
 
 		reg = new Registry();
+		reg.changeGameState(new GStateFindMatch(reg));
 
 		// draw
 		reg.draw.update();
@@ -30,6 +32,8 @@ public class Match3 extends Game { //ApplicationAdapter {
 		//reg.input.update();
 
 		// Logic
+		reg.logic();
+
 		reg.logic.update();
 
 		// draw
