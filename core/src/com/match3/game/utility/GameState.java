@@ -9,5 +9,8 @@ public enum GameState {
     FIND_MATCH,
     MATCH_ANIMATION,
     SCORING_MATCH,
-    FALLING_TILES;
+    FALLING_TILES,
+    FALLING_ANIMATION,
+    ADDING_TILES;
+
 }

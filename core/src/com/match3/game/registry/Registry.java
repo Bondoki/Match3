@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.match3.game.animation.Animation;
 import com.match3.game.animation.AnimationDisappear;
+import com.match3.game.animation.AnimationFalling;
 import com.match3.game.animation.AnimationHandler;
 import com.match3.game.animation.AnimationSwap;
 import com.match3.game.input.Input;
@@ -164,6 +165,14 @@ public class Registry extends ScreenAdapter implements AnimationHandler{
             AnimationDisappear disappearAnimation = (AnimationDisappear)animation;
 
             gameState = GameState.SCORING_MATCH;
+
+        }
+
+        if (animation.getClass() == AnimationFalling.class)
+        {
+            AnimationFalling fallingAnimation = (AnimationFalling)animation;
+
+            gameState = GameState.FALLING_TILES;
 
         }
 

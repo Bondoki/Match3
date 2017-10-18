@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector3;
 import com.match3.game.animation.AnimationDisappear;
+import com.match3.game.animation.AnimationFalling;
 import com.match3.game.entities.Tile;
 import com.match3.game.utility.GameState;
 import com.match3.game.registry.Registry;
@@ -24,6 +25,8 @@ public class Logic {
     public Vector3 mouse_position = new Vector3(0,0,0);
 
     public Set<Tile> MatchedTiles = new HashSet<Tile>();
+
+    public Set<Tile> FallingTiles = new HashSet<Tile>();
 
     public void update() {
 
@@ -78,9 +81,36 @@ public class Logic {
             return;
         }
 
+
+
         // update the tiles
         if (reg.gameState == GameState.FALLING_TILES) {
+
+            if(fallingTiles() == true) {
+                //swapFallenTiles();
+                reg.gameState = GameState.FALLING_ANIMATION;
+            }
+            else
+                reg.gameState = GameState.ADDING_TILES;
+
+            return;
             //fallingTiles();
+            //randomTiles();
+            //reg.gameState = GameState.FIND_MATCH;
+
+            //return;
+        }
+
+        // falling animation
+        if (reg.gameState == GameState.FALLING_ANIMATION)
+        {
+            animateFallingTiles();
+
+            return;
+        }
+        // add new tiles
+        if (reg.gameState == GameState.ADDING_TILES)
+        {
             randomTiles();
             reg.gameState = GameState.FIND_MATCH;
 
@@ -347,20 +377,64 @@ public class Logic {
         }
     }
 
-    public void fallingTiles()
+    public void animateFallingTiles()
     {
-        /*
-        random adding
-        for (int row = 0; row < reg.tiles.length; row++) {
-            for (int col = 0; col < reg.tiles.length; col++) {
-                if (reg.tiles[row][col].type == TileType.NONE) {
-                    reg.tiles[row][col].type = TileType.getRandom();
-                }
-            }
+        // falling tile animation
+        if (FallingTiles.size() > 0)
+        {
+            reg.animations.add(new AnimationFalling(FallingTiles, reg.TILESIZE, reg));
         }
-        */
+    }
+
+    public boolean fallingTiles()
+    {
+        //
+        //clear all falling tiles
+        FallingTiles.clear();
 
         boolean repeatFalling = false;
+
+
+            // falling from top to bottom
+            for (int row = (reg.tiles.length-1); row >= 0; row--) {
+                for (int col = 0; col < reg.tiles.length; col++) {
+                    if (reg.tiles[row][col].type == TileType.NONE) {
+                        if ((row - 1) >= 0) {
+                            //if (reg.tiles[row - 1][col].type == TileType.NONE)
+                            {
+                                FallingTiles.add(reg.tiles[row-1][col]);
+                                // Swap Tiles
+                                //reg.tiles[row][col].type = reg.tiles[row-1][col].type;
+                                //reg.tiles[row-1][col].type = TileType.NONE;
+                                repeatFalling = true;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return repeatFalling;
+
+            // add new tile on top
+            /*for (int col = 0; col < reg.tiles.length; col++) {
+                if (reg.tiles[0][col].type == TileType.NONE) {
+
+                    reg.tiles[0][col].type = TileType.getRandom();
+                    System.out.println("Added a Tile in col " + col);
+
+                    repeatFalling = true;
+
+                }
+            }*/
+
+            //if (repeatFalling) {
+            //    fallingTiles();
+            //}
+
+
+
+
+        /* boolean repeatFalling = false;
 
         // falling from top to bottom
         for (int row = (reg.tiles.length-1); row >= 0; row--) {
@@ -396,6 +470,7 @@ public class Logic {
             fallingTiles();
         }
 
-
+    */
     }
+
 }

@@ -34,7 +34,7 @@ public class AnimationDisappear implements Animation
         this.currentDuration += delta;
         if (this.currentDuration >= AnimationDisappear.totalDuration)
         {
-            
+
             this.handler.onComplete(this);
         }
         else
