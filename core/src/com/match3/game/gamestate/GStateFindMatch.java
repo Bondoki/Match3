@@ -131,7 +131,7 @@ public class GStateFindMatch implements GState{
         // disappear matching tile animation
         if (MatchedTiles.size() > 0)
         {
-        //    reg.animations.add(new AnimationDisappear(MatchedTiles, reg.TILESIZE, reg));
+            reg.animations.add(new AnimationDisappear(MatchedTiles, reg.TILESIZE, reg));
         }
     }
 

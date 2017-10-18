@@ -69,6 +69,11 @@ public class GStateScoringMatch implements GState {
             for (int col = 0; col < reg.tiles.length; col++) {
                 if (reg.tiles[row][col].type == TileType.MATCH) {
                     reg.tiles[row][col].type = TileType.NONE;
+                    reg.tiles[row][col].sizeX = reg.TILESIZE;
+                    reg.tiles[row][col].sizeY = reg.TILESIZE;
+
+                    reg.tiles[row][col].x = (col * reg.TILESIZE) + reg.tilesXOffset;
+                    reg.tiles[row][col].y = ((reg.tiles.length -1 -row) * reg.TILESIZE) + reg.tilesYOffset;
                 }
             }
         }
