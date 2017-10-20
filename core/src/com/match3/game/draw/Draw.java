@@ -7,6 +7,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.match3.game.registry.Registry;
 import com.match3.game.utility.TileType;
 
+import java.util.LinkedList;
+import java.util.Stack;
+
 /**
  * Created by bondoki on 27.08.17.
  */
@@ -16,6 +19,10 @@ public class Draw {
     public Registry reg;
 
     public TextureRegion[] textureRegions;
+
+    public TextureRegion[] texNumbers;
+
+    Stack<Integer> stack = new Stack<Integer>();
 
     public Draw() {
 
@@ -35,9 +42,44 @@ public class Draw {
         textureRegions[5] = new TextureRegion(new Texture("gem06_64x64.png"), 0, 0, 64, 64);
         */
 
+        texNumbers = new TextureRegion[10];
+        int xsize=36;
+        int ysize=56;
+        texNumbers[0] = new TextureRegion(new Texture("number00_36x56.png"), 0, 0, xsize, ysize);
+        texNumbers[1] = new TextureRegion(new Texture("number01_36x56.png"), 0, 0, xsize, ysize);
+        texNumbers[2] = new TextureRegion(new Texture("number02_36x56.png"), 0, 0, xsize, ysize);
+        texNumbers[3] = new TextureRegion(new Texture("number03_36x56.png"), 0, 0, xsize, ysize);
+        texNumbers[4] = new TextureRegion(new Texture("number04_36x56.png"), 0, 0, xsize, ysize);
+        texNumbers[5] = new TextureRegion(new Texture("number05_36x56.png"), 0, 0, xsize, ysize);
+        texNumbers[6] = new TextureRegion(new Texture("number06_36x56.png"), 0, 0, xsize, ysize);
+        texNumbers[7] = new TextureRegion(new Texture("number07_36x56.png"), 0, 0, xsize, ysize);
+        texNumbers[8] = new TextureRegion(new Texture("number08_36x56.png"), 0, 0, xsize, ysize);
+        texNumbers[9] = new TextureRegion(new Texture("number09_36x56.png"), 0, 0, xsize, ysize);
+
+
+
+
+    }
+
+    public void getScoreInDigits()
+    {
+        stack.clear();
+
+        int number = reg.score;
+
+        while (number > 0) {
+            stack.push( number % 10 );
+            number = number / 10;
+        }
+
+
+
     }
 
     public void update() {
+
+        // get score as digits
+        getScoreInDigits();
 
         // tell the camera to update its matrices.
         reg.camera.update();
@@ -48,6 +90,28 @@ public class Draw {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         reg.batch.begin();
         reg.batch.draw(reg.img, 0, 0);
+
+        /*for (int i = 0; i <= 9; i++)
+        {
+            reg.batch.draw(texNumbers[i], 60+i*texNumbers[i].getRegionWidth(),reg.windowHeight-texNumbers[i].getRegionHeight()-20 );
+        }
+        */
+
+        int countIdx = 0;
+        int stackSize = stack.size();
+        while (!stack.isEmpty()) {
+
+            int numberOnStack = stack.pop();
+            reg.batch.draw(texNumbers[numberOnStack], reg.windowWidth-60+(-1*stackSize+countIdx)*texNumbers[numberOnStack].getRegionWidth(),reg.windowHeight-texNumbers[numberOnStack].getRegionHeight()-20 );
+            countIdx++;
+        }
+
+        // adding 0 to unused score fields
+        for (int i = 0; i <= 9-countIdx; i++)
+        {
+            reg.batch.draw(texNumbers[0], 60+i*texNumbers[0].getRegionWidth(),reg.windowHeight-texNumbers[0].getRegionHeight()-20 );
+        }
+
 
 
         for (int row = 0; row < reg.tiles.length; row++) {

@@ -51,8 +51,8 @@ public class Match3 extends Game { //ApplicationAdapter {
 	@Override
 	public void resize(int width, int height)
 	{
-		reg.windowWidth = width;
-		reg.windowHeight = height;
+		//reg.windowWidth = width;
+		//reg.windowHeight = height;
 		reg.viewport.update(width, height, true);
 		super.resize(width, height);
 	}
