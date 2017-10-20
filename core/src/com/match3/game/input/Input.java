@@ -230,7 +230,7 @@ public class Input implements InputProcessor {
                 reg.tileIsActive = true;
                 reg.activeCol = colIdx;
                 reg.activeRow = rowIdx;
-                System.out.println("row " + rowIdx + " col " + colIdx + " in table " + isIdxInsideRowAndCol(rowIdx, colIdx) + " type: " +reg.tiles[rowIdx][colIdx].type + "  x: "+reg.tiles[rowIdx][colIdx].x +" y: "+reg.tiles[rowIdx][colIdx].y );
+                System.out.println("row " + rowIdx + " col " + colIdx + " in table " + isIdxInsideRowAndCol(rowIdx, colIdx) + " type: " +reg.tiles[rowIdx][colIdx].type + "  x: "+reg.tiles[rowIdx][colIdx].x +" y: "+reg.tiles[rowIdx][colIdx].y + "  size.x: " + reg.tiles[rowIdx][colIdx].sizeX + "  size.y: " + reg.tiles[rowIdx][colIdx].sizeY);
 
                 return true;
             }
