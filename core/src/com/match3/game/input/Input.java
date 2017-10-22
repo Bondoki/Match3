@@ -202,6 +202,10 @@ public class Input implements InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 
+        //Check if all animations are done before continuing the game
+        if (reg.animations.size() > 0)
+            return false;
+
         // screenX equivalent to Gdx.input.getX()
         // screenY equivalent to Gdx.input.getY()
         //System.out.println("S" + screenX + " " + screenY+ " == I " + Gdx.input.getX() + " " + Gdx.input.getY());
@@ -287,6 +291,10 @@ public class Input implements InputProcessor {
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+
+        //Check if all animations are done before continuing the game
+        if (reg.animations.size() > 0)
+            return false;
 
         mouse_position.set(screenX, screenY, 0);
         reg.camera.unproject(mouse_position, reg.viewport.getScreenX(), reg.viewport.getScreenY(), reg.viewport.getScreenWidth(), reg.viewport.getScreenHeight());
